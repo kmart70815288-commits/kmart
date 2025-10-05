@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kmart Mini Market</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+<style>
+:root{--brand:#007bff;--brand-dark:#0056b3;}
+body{font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:#f4f4f4;margin:0;}
+.navbar{background:var(--brand);color:white;position:sticky;top:0;z-index:1000;padding:0.5rem 0;}
+.navbar .navbar-brand{font-weight:bold;color:white;margin-left:1rem;}
+.navbar .nav-link{color:white;margin-left:10px;}
+.navbar .nav-link:hover{color:#f0f0f0;}
+.header-row{background:linear-gradient(90deg,var(--brand),#2aa0ff);color:white;padding:14px 0;}
+.header-inner{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.logo-box{flex:0 0 auto;display:flex;align-items:center;gap:8px;}
+.logo-mark{width:64px;height:64px;border-radius:8px;background:white;color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;}
+.hero-content{flex:1 1 300px;min-width:200px;}
+.hero-title{font-size:1.25rem;font-weight:700;margin:0;}
+.hero-sub{opacity:0.95;margin:4px 0 8px;font-size:0.95rem;}
+.search-box{flex:0 0 360px;min-width:180px;}
+.search-box .form-control{border-radius:0.375rem;padding:0.5rem 0.75rem;}
+.mega-dropdown{position:relative;display:inline-block;}
+.mega-dropdown button{background:white;color:var(--brand);border:none;padding:0.5rem 1rem;border-radius:0.25rem;cursor:pointer;}
+.mega-menu{display:none;position:absolute;top:100%;left:0;right:0;background:white;border:1px solid rgba(0,0,0,.15);border-radius:0.25rem;padding:1rem;gap:0.5rem;z-index:1000;flex-wrap:wrap;}
+.mega-dropdown.show .mega-menu{display:flex;}
+.mega-menu li{list-style:none; flex: 1 0 150px;}
+.mega-menu a{display:block;padding:0.4rem 0.6rem;text-decoration:none;color:#000;border-radius:0.25rem;}
+.mega-menu a:hover{background:rgba(0,0,0,0.05);}
+.product-card{transition:transform .12s ease, box-shadow .12s ease;background:white;border-radius:5px;overflow:hidden;}
+.product-card:hover{transform:translateY(-6px);box-shadow:0 8px 24px rgba(0,0,0,.1);}
+.product-card img{width:100%;height:200px;object-fit:cover;}
+.product-card .card-body{padding:0.5rem 1rem;}
+.product-card h5{font-size:1rem;margin:0.5rem 0;}
+.product-card p{margin:0.3rem 0;color:#555;}
+.product-card button{width:100%;margin-top:0.5rem;background:var(--brand);color:white;border:none;padding:0.4rem 0.6rem;border-radius:0.25rem;cursor:pointer;}
+.product-card button:hover{background:var(--brand-dark);}
+#cartItems div{border-bottom:1px solid #eee;padding:8px 6px;display:flex;justify-content:space-between;align-items:center;}
+.cart-qty button{padding:0 8px;background:#eee;border:none;border-radius:4px;cursor:pointer;margin:0 4px;}
+.out-of-stock{opacity:0.6;text-align:center;font-weight:700;color:red;}
+#offers {background: linear-gradient(90deg, var(--brand), #e61639);border-radius:10px;margin:18px auto; padding:22px 16px;color:#fff;}
+#offers h3 {color:white;font-weight:bold;margin-bottom:6px;}
+#offers .carousel-item img {border-radius:8px;height:320px;object-fit:cover;}
+#countdown {background: rgba(255,255,255,0.15); display: inline-block;padding:6px 15px;border-radius:8px;margin-bottom:12px;color:#fff;transition: all 0.3s ease;}
+#countdown.danger { background: rgba(255,0,0,0.18); color:#ff4d4d; font-weight:700; }
+@media(max-width:900px){
+  .header-inner{justify-content:center;text-align:center;}
+  .search-box{flex-basis:100%;}
+  .hero-content{flex-basis:100%;}
+}
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="#">Kmart</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="topNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item me-3"><a class="nav-link" href="#products">المنتجات</a></li>
+        <li class="nav-item me-3"><a class="nav-link" href="#offers">العروض</a></li>
+        <li class="nav-item me-3"><a class="nav-link" href="#contact">اتصل</a></li>
+        <li class="nav-item"><button id="cartBtn" class="btn btn-outline-light">السلة (<span id="cartCount">0</span>)</button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<header class="header-row">
+  <div class="container header-inner">
+    <div class="logo-box">
+      <div class="logo-mark">KM</div>
+      <div style="color:white;font-weight:600;">Kmart</div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-title">مول السوبرماركت الحديث</div>
+      <div class="hero-sub">كل ما تحتاجه من منتجات يومية — تسوق سريع وآمن</div>
+    </div>
+    <div class="search-box">
+      <div class="input-group">
+        <input id="q" class="form-control" placeholder="ابحث عن منتج أو قسم أو ماركة">
+        <button id="searchBtn" class="btn btn-dark">بحث</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="offers" class="container">
+  <div class="text-center">
+    <h3>⭐ عروض اليوم</h3>
+    <p id="countdown" class="fs-6 fw-bold"></p>
+    <div id="offersCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner" id="offersCarouselInner"></div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#offersCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#offersCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="py-3 container d-flex justify-content-between align-items-center">
+  <div class="mega-dropdown">
+    <button class="btn btn-white" id="catsBtn">جميع الأقسام</button>
+    <ul id="cats-menu" class="mega-menu"></ul>
+  </div>
+  <div class="d-flex">
+    <select id="sort" class="form-select form-select-sm me-2">
+      <option value="default">ترتيب</option>
+      <option value="price-asc">الأرخص</option>
+      <option value="price-desc">الأغلى</option>
+      <option value="alpha">أ-ي</option>
+    </select>
+    <button id="refresh" class="btn btn-outline-primary btn-sm">تحديث</button>
+  </div>
+</section>
+
+<main class="py-5" id="products">
+  <div class="container">
+    <div id="grid" class="row g-3"></div>
+    <div id="noRes" class="text-center text-muted py-5 d-none">لا نتائج.</div>
+  </div>
+</main>
+
+<!-- ✅ نافذة السلة مع نموذج المعلومات -->
+<div class="modal fade" id="cartModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">سلة الشراء</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="cartItems"></div>
+        <div class="mt-3 text-end">
+          <strong>المجموع: <span id="cartTotal">0</span> ل.ل</strong>
+        </div>
+
+        <hr>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">معلومات الزبون</label>
+          <input type="text" id="custName" class="form-control mb-2" placeholder="الاسم الكامل">
+          <input type="tel" id="custPhone" class="form-control mb-2" placeholder="رقم الهاتف (مثلاً 03XXXXXX)">
+          <textarea id="custAddress" class="form-control" placeholder="العنوان الكامل"></textarea>
+        </div>
+
+        <div class="mt-3">
+          <label><input type="radio" name="delivery" value="delivery" checked> توصيل</label>
+          <label class="ms-3"><input type="radio" name="delivery" value="pickup"> استلام من المتجر</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="checkout" class="btn btn-success">إتمام الطلب</button>
+        <button class="btn btn-danger" id="clearCart">تفريغ السلة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="contact" class="bg-white py-4 border-top">
+  <div class="container d-flex justify-content-between">
+    <span>© Kmart Mini Market</span>
+    <span>البريد: info@example.com</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const grid = document.getElementById("grid");
+const catsMenu = document.getElementById("cats-menu");
+const catsBtn = document.getElementById("catsBtn");
+let products = [];
+let cart = JSON.parse(localStorage.getItem('cart')||'[]');
+
+// ----------------- جلب المنتجات -----------------
+async function loadProducts(){
+  try {
+    const res = await fetch("/api/products");
+    products = await res.json();
+    renderProducts(products);
+    renderCategories(products);
+    updateCart();
+  } catch(e){ console.error(e); }
+}
+loadProducts();
+
+// ----------------- عرض المنتجات -----------------
+function renderProducts(list){
+  grid.innerHTML = "";
+  if(list.length===0){ document.getElementById("noRes").classList.remove("d-none"); return; }
+  document.getElementById("noRes").classList.add("d-none");
+  list.forEach(p=>{
+    const col=document.createElement("div");
+    col.className="col-6 col-md-4 col-lg-3";
+    const outOfStock = p.quantity === 0 ? `<div class="out-of-stock">Out of Stock</div>` : '';
+    const qtyInput = p.isWeightBased 
+      ? `<input type="number" value="${p.qty||1}" min="0.1" step="0.1" id="qty${p.id}" class="form-control mb-1">`
+      : `<input type="number" value="${p.qty||1}" min="1" max="${p.quantity}" id="qty${p.id}" class="form-control mb-1">`;
+    col.innerHTML=`
+      <div class="card product-card h-100">
+        <img src="${p.img||'/frontend/img/placeholder.png'}" class="card-img-top" alt="${p.name}">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">${p.name}</h5>
+          <p class="card-text">${p.price} ل.ل</p>
+          ${outOfStock}
+          ${p.quantity>0 ? qtyInput : ''}
+          <button class="btn btn-primary w-100 mt-auto" onclick="addToCart('${p.id}')">أضف إلى السلة</button>
+        </div>
+      </div>`;
+    grid.appendChild(col);
+  });
+}
+
+// ----------------- أقسام -----------------
+function renderCategories(products){
+  const categories=[...new Set(products.map(p=>p.category).filter(Boolean))];
+  catsMenu.innerHTML="";
+  categories.forEach(cat=>{
+    const li=document.createElement("li");
+    li.innerHTML=`<a href="#">${cat}</a>`;
+    li.addEventListener("click", ()=>filterByCategory(cat));
+    catsMenu.appendChild(li);
+  });
+}
+function filterByCategory(cat){
+  const filtered = products.filter(p=>p.category===cat);
+  renderProducts(filtered);
+}
+
+// ----------------- بحث -----------------
+document.getElementById("searchBtn").addEventListener("click", ()=>{
+  const q = document.getElementById("q").value.toLowerCase();
+  const filtered = products.filter(p=>p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q)));
+  renderProducts(filtered);
+});
+
+// ----------------- السلة -----------------
+function updateCart(){
+  const cartItems = document.getElementById("cartItems");
+  cartItems.innerHTML="";
+  let total=0;
+  cart.forEach(item=>{
+    total += item.price * item.qty;
+    const div = document.createElement("div");
+    div.innerHTML=`<span>${item.name} (${item.qty})</span>
+      <span class="cart-qty">
+        <button onclick="changeQty('${item.id}',-1)">-</button>
+        <button onclick="changeQty('${item.id}',1)">+</button>
+      </span>
+      <span>${item.price*item.qty}</span>`;
+    cartItems.appendChild(div);
+  });
+  document.getElementById("cartTotal").textContent = total;
+  document.getElementById("cartCount").textContent = cart.reduce((a,b)=>a+b.qty,0);
+  localStorage.setItem('cart',JSON.stringify(cart));
+}
+
+function addToCart(id){
+  const prod = products.find(p=>p.id==id);
+  if(!prod || prod.quantity===0){ alert("المنتج غير متوفر"); return; }
+  const qty = parseFloat(document.getElementById("qty"+id).value)||1;
+  const existing = cart.find(c=>c.id==id);
+  if(existing){ existing.qty += qty; }
+  else { cart.push({id:prod.id,name:prod.name,price:prod.price,qty:qty}); }
+  updateCart();
+}
+
+// تعديل كمية
+function changeQty(id,delta){
+  const item = cart.find(c=>c.id==id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0) cart = cart.filter(c=>c.id!==id);
+  updateCart();
+}
+
+// ✅ إتمام الطلب وإرسال للواتساب
+document.getElementById("checkout").addEventListener("click", ()=>{
+  if(cart.length===0){ alert("السلة فارغة!"); return; }
+
+  const name = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+  const address = document.getElementById("custAddress").value.trim();
+  const delivery = document.querySelector('input[name="delivery"]:checked').value;
+
+  if(!name || !phone || !address){
+    alert("يرجى تعبئة الاسم ورقم الهاتف والعنوان.");
+    return;
+  }
+
+  let msg = `🛒 *طلب جديد* (${delivery === 'delivery' ? 'توصيل' : 'استلام من المتجر'})%0A%0A`;
+  msg += `👤 الاسم: ${name}%0A📞 الهاتف: ${phone}%0A🏠 العنوان: ${address}%0A%0A`;
+  msg += `====================%0A`;
+
+  cart.forEach(i=>{
+    msg += `• ${i.name} × ${i.qty} = ${i.price*i.qty} ل.ل%0A`;
+  });
+
+  const total = cart.reduce((a,b)=>a+b.price*b.qty,0);
+  msg += `====================%0A💰 المجموع: ${total} ل.ل%0A`;
+
+  const phoneNumber = "96170815288"; // ✅ رقم المتجر
+
+  // فتح واتساب
+  window.open(`https://wa.me/${phoneNumber}?text=${msg}`);
+
+  // تفريغ السلة
+  cart = [];
+  updateCart();
+
+  // إغلاق النافذة
+  const modal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
+  modal.hide();
+});
+
+// فتح السلة
+const cartModal = new bootstrap.Modal(document.getElementById("cartModal"));
+document.getElementById("cartBtn").addEventListener("click", ()=>cartModal.show());
+document.getElementById("clearCart").addEventListener("click", ()=>{ cart=[]; updateCart(); });
+
+// ----------------- عروض -----------------
+async function loadOffers(){
+  const res = await fetch("/api/offers");
+  const offers = await res.json();
+  const inner = document.getElementById("offersCarouselInner");
+  inner.innerHTML="";
+  offers.forEach((o,i)=>{
+    inner.innerHTML += `
+      <div class="carousel-item ${i===0?'active':''}">
+        <img src="${o.img}" class="d-block w-100" alt="offer">
+      </div>`;
+  });
+}
+loadOffers();
+</script>
+</body>
+</html>

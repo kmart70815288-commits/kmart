@@ -1,0 +1,28 @@
+:root{--brand:#007bff}
+
+/* Body */
+body{font-family: "Segoe UI", Tahoma, Arial, sans-serif;background:#f7f9fc}
+
+/* Hero */
+.hero{background:linear-gradient(90deg,var(--brand),#2aa0ff);padding:60px 0;text-align:center;color:#fff}
+
+/* Mega Menu */
+.mega-menu-wrapper { background:#f8f9fa;border-bottom:1px solid #ddd;position:relative;z-index:10;padding:0;margin-bottom:20px; }
+.main-menu { display:flex; flex-wrap:wrap; list-style:none; margin:0; padding:5px 0; overflow-x:auto; }
+.menu-item { position:relative; }
+.menu-item > a { text-decoration:none; color:#333; display:block; padding:10px 15px; white-space:nowrap; }
+.submenu { display:none; position:absolute; top:100%; left:0; background:#fff; border:1px solid #ddd; min-width:200px; z-index:20; }
+.menu-item:hover .submenu { display:block; }
+.submenu ul { list-style:none; margin:0; padding:0; }
+.submenu ul li a { display:block; padding:8px 12px; color:#333; text-decoration:none; }
+.submenu ul li a:hover { background:#ddd; }
+
+/* Products */
+.product-card{transition:transform .12s ease, box-shadow .12s ease}
+.product-card:hover{transform:translateY(-6px);box-shadow:0 8px 24px rgba(12,13,16,.08)}
+.card-title{font-size:0.95rem}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-menu { overflow-x:auto; }
+}
